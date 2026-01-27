@@ -18,6 +18,7 @@ dependencies {
 
     implementation("com.google.auto.service:auto-service:1.1.1")
     implementation(files("libs/workflow-api-1.0.jar"))
+    implementation(files("libs/project-api-1.0.jar"))
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

@@ -16,12 +16,12 @@
 
 package org.sample.codeworkflow;
 
-import com.bytechef.workflow.ProjectHandler;
-import com.bytechef.workflow.definition.ProjectDefinition;
+import com.bytechef.automation.project.ProjectHandler;
+import com.bytechef.automation.project.definition.ProjectDefinition;
 import com.google.auto.service.AutoService;
 import org.sample.codeworkflow.workflow.SampleWorkflow1;
 
-import static com.bytechef.workflow.definition.WorkflowDsl.project;
+import static com.bytechef.automation.project.definition.ProjectDsl.project;
 import static org.sample.codeworkflow.constant.SampleConstants.SAMPLE_CODE_PROJECT;
 
 /**
