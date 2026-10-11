@@ -5,27 +5,23 @@ plugins {
 group = "org.sample"
 version = "1.0.0"
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
 repositories {
     mavenCentral()
-
-    flatDir {
-        dirs("lib")
-    }
 }
 
 dependencies {
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
 
-    implementation("com.google.auto.service:auto-service:1.1.1")
-    implementation(files("libs/workflow-api-1.0.jar"))
-    implementation(files("libs/project-api-1.0.jar"))
+    compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
 
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-}
-
-tasks.test {
-    useJUnitPlatform()
+    // The ByteChef server provides these at runtime, so they are compile-only and not packed into the jar.
+    compileOnly(files("libs/project-api-1.0.jar", "libs/workflow-api-1.0.jar"))
 }
 
 tasks.jar {
