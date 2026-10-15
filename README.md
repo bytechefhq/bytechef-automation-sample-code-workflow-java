@@ -5,8 +5,33 @@ A sample ByteChef **automation code project** written in Java. It is a plain jar
 describes the project and its workflows with `ProjectDsl` and `WorkflowDsl`. The server finds the handler with
 `ServiceLoader` and runs each task's `perform` itself.
 
-The project, "Sample Code Project Java", has one workflow, `sampleWorkflow1`. It takes a `name` input, runs one task,
-`greet`, that logs and returns `Hello, <name>!`, and exposes that as the `greeting` output.
+The project, "Sample Code Project Java", has three workflows, one class each under `org.sample.codeworkflow.workflow`:
+
+- `sampleWorkflow1` (`SampleWorkflow1`) takes a `name` input, runs one task, `greet`, that logs and returns
+  `Hello, <name>!`, and exposes that as the `greeting` output.
+- `summarizeNewEmail` (`SummarizeNewEmailWorkflow`) starts with the Gmail **New Email** polling trigger
+  (`googleMail/v1/newEmailPolling`). It runs once for every new email and returns a one-line summary as the `summary`
+  output.
+- `fetchRecentEmails` (`FetchRecentEmailsWorkflow`) takes an optional `from` input, calls the Gmail **Search Email**
+  action and returns the matching messages as the `emails` output.
+
+### Connections
+
+A task names the connections it uses and calls a component action through one of them:
+
+```java
+task("fetchEmails")
+    .connections(connection("googleMail", "gmail"))
+    .perform(context -> context.component("googleMail", "searchEmail", Map.of("maxResults", 10), "gmail"));
+```
+
+The declared connection, and the Gmail trigger, show up in the workflow's test configuration and in the project
+deployment like any other workflow connection: pick a Gmail connection for `gmail` there. Nothing in the source names a
+specific account.
+
+Inside `perform`, `context.input()` returns the workflow inputs plus the output of every task that already ran (under
+the task's name), `context.input("name")` returns one of them, and `context.log(level, message)` writes to the
+execution log.
 
 ## Build
 

@@ -19,7 +19,9 @@ package org.sample.codeworkflow;
 import com.bytechef.automation.project.ProjectHandler;
 import com.bytechef.automation.project.definition.ProjectDefinition;
 import com.google.auto.service.AutoService;
+import org.sample.codeworkflow.workflow.FetchRecentEmailsWorkflow;
 import org.sample.codeworkflow.workflow.SampleWorkflow1;
+import org.sample.codeworkflow.workflow.SummarizeNewEmailWorkflow;
 
 import static com.bytechef.automation.project.definition.ProjectDsl.project;
 import static org.sample.codeworkflow.constant.SampleConstants.SAMPLE_CODE_PROJECT;
@@ -32,7 +34,9 @@ public class SampleProjectHandler implements ProjectHandler {
 
     private static final ProjectDefinition PROJECT_DEFINITION = project(SAMPLE_CODE_PROJECT)
         .description("Sample code project description.")
-        .workflows(SampleWorkflow1.WORKFLOW_DEFINITION);
+        .workflows(
+            SampleWorkflow1.WORKFLOW_DEFINITION, SummarizeNewEmailWorkflow.WORKFLOW_DEFINITION,
+            FetchRecentEmailsWorkflow.WORKFLOW_DEFINITION);
 
     @Override
     public ProjectDefinition getDefinition() {
