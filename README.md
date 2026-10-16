@@ -5,7 +5,7 @@ A sample ByteChef **automation code project** written in Java. It is a plain jar
 describes the project and its workflows with `ProjectDsl` and `WorkflowDsl`. The server finds the handler with
 `ServiceLoader` and runs each task's `perform` itself.
 
-The project, "Sample Code Project Java", has three workflows, one class each under `org.sample.codeworkflow.workflow`:
+The project, "Sample Code Project Java", has four workflows, one class each under `org.sample.codeworkflow.workflow`:
 
 - `sampleWorkflow1` (`SampleWorkflow1`) takes a `name` input, runs one task, `greet`, that logs and returns
   `Hello, <name>!`, and exposes that as the `greeting` output.
@@ -14,6 +14,10 @@ The project, "Sample Code Project Java", has three workflows, one class each und
   output.
 - `fetchRecentEmails` (`FetchRecentEmailsWorkflow`) takes an optional `from` input, calls the Gmail **Search Email**
   action and returns the matching messages as the `emails` output.
+- `notifySlackOnNewEmail` (`NotifySlackOnNewEmailWorkflow`) starts with the Gmail **New Email** trigger and takes a
+  required `channel` input, the ID of a Slack channel. Its `postToSlack` task calls the Slack **Send Channel Message**
+  action, so it declares a `slack` connection and passes its name: pick a Slack connection for it in the test
+  configuration or when deploying the project.
 
 ### Connections
 
