@@ -28,9 +28,6 @@ public class FetchRecentEmailsWorkflow {
         .tasks(
             task("fetchEmails")
                 .label("Fetch Emails")
-                // A code task's perform calls actions itself, so it declares the connections it uses; the name is what
-                // perform passes to the action. Pick the Gmail connection for "gmail" in the test configuration or when
-                // deploying the project.
                 .connections(connection("googleMail", "gmail"))
                 .perform(FetchRecentEmailsWorkflow::fetchEmails));
 
