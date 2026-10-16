@@ -15,9 +15,10 @@ The project, "Sample Code Project Java", has four workflows, one class each unde
 - `fetchRecentEmails` (`FetchRecentEmailsWorkflow`) takes an optional `from` input, calls the Gmail **Search Email**
   action and returns the matching messages as the `emails` output.
 - `notifySlackOnNewEmail` (`NotifySlackOnNewEmailWorkflow`) starts with the Gmail **New Email** trigger and takes a
-  required `channel` input, the ID of a Slack channel. Its `postToSlack` task calls the Slack **Send Channel Message**
-  action, so it declares a `slack` connection and passes its name: pick a Slack connection for it in the test
-  configuration or when deploying the project.
+  required `channel` input; its options come from Slack's own `channel` input (`componentName`, `componentVersion` and
+  `groupName` on the input), so it is picked from the Slack workspace's channels. Its `postToSlack` task calls the Slack
+  **Send Channel Message** action, so it declares a `slack` connection and passes its name: pick a Slack connection for
+  it in the test configuration or when deploying the project.
 
 ### Connections
 
