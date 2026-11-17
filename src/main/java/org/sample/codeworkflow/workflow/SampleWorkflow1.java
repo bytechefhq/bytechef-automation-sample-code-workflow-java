@@ -7,6 +7,7 @@ import static com.bytechef.workflow.definition.WorkflowDsl.workflow;
 
 import com.bytechef.workflow.definition.TaskContext;
 import com.bytechef.workflow.definition.WorkflowDsl.ModifiableWorkflowDefinition;
+import java.util.Map;
 
 public class SampleWorkflow1 {
 
@@ -27,8 +28,8 @@ public class SampleWorkflow1 {
                 .description("Builds a greeting from the name input.")
                 .perform(SampleWorkflow1::greet));
 
-    private static Object greet(TaskContext context) {
-        Object name = context.input("name");
+    private static Object greet(Map<String, ?> input, TaskContext context) {
+        Object name = input.get("name");
 
         context.log(TaskContext.LogLevel.INFO, "Greeting " + name);
 

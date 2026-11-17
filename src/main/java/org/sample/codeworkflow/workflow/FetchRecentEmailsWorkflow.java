@@ -31,10 +31,10 @@ public class FetchRecentEmailsWorkflow {
                 .connections(connection("googleMail", "gmail"))
                 .perform(FetchRecentEmailsWorkflow::fetchEmails));
 
-    private static Object fetchEmails(TaskContext context) throws Exception {
+    private static Object fetchEmails(Map<String, ?> input, TaskContext context) throws Exception {
         Map<String, Object> searchInput = new HashMap<>();
 
-        Object from = context.input("from");
+        Object from = input.get("from");
 
         if (from != null) {
             searchInput.put("from", from);
