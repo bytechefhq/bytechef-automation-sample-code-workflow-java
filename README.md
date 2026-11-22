@@ -5,7 +5,7 @@ A sample ByteChef **automation code project** written in Java. It is a plain jar
 describes the project and its workflows with `ProjectDsl` and `WorkflowDsl`. The server finds the handler with
 `ServiceLoader` and runs each task's `perform` itself.
 
-The project, "Sample Code Project Java", has four workflows, one class each under `org.sample.codeworkflow.workflow`:
+The project, "Sample Code Project Java", has five workflows, one class each under `org.sample.codeworkflow.workflow`:
 
 - `sampleWorkflow1` (`SampleWorkflow1`) takes a `name` input, runs one task, `greet`, that logs and returns
   `Hello, <name>!`, and exposes that as the `greeting` output.
@@ -19,6 +19,31 @@ The project, "Sample Code Project Java", has four workflows, one class each unde
   `groupName` on the input), so it is picked from the Slack workspace's channels. Its `postToSlack` task calls the Slack
   **Send Channel Message** action, so it declares a `slack` connection and passes its name: pick a Slack connection for
   it in the test configuration or when deploying the project.
+- `listOrders` (`ListOrdersWorkflow`) starts with the API Platform **New API Request** trigger
+  (`apiPlatform/v1/newApiRequest`), so it can back an API Platform endpoint. Its `fetchOrders` task returns a list of
+  orders, and its `respond` task is a component task that runs the API Platform **Response to API Request** action with
+  the `fetchOrders` output as the response body.
+
+### Component tasks
+
+A task that only runs a component action, with no logic of its own, can name the action by type with
+`componentTask(name, type)` instead of declaring a `perform`, the same way `trigger(name, type)` names a trigger:
+
+```java
+componentTask("respond", "apiPlatform/v1/responseToAPIRequest")
+    .parameters(Map.of("responseType", "SUCCESS", "response", Map.of("success", "${fetchOrders}")))
+```
+
+The type is `<component>/v<version>/<action>`, and `parameters` holds the action's inputs. A `${...}` expression is
+evaluated when the task runs: `"${fetchOrders}"` is the whole output of the `fetchOrders` task, `"${fetchOrders.count}"`
+one of its fields and `"${fetchOrders.orders[0].id}"` an element of a list, and text such as
+`"Found ${fetchOrders.count} orders"` becomes a string with the value filled in. A component task declares no
+connections: when its action needs one, the workflow's test configuration and the project deployment ask for it like
+for the same task in a visual workflow. Deploying fails when the component, its version or the action does not exist on
+the server. `componentTask` needs a `workflow-api-1.0.jar` built from a ByteChef version that has component tasks.
+
+To serve `listOrders`, create an API collection for the deployed project under Automation → **API Platform**, add an
+endpoint that runs `listOrders`, and enable both; a request to the endpoint answers with the orders.
 
 ### Connections
 
